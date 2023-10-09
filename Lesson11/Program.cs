@@ -7,16 +7,12 @@ namespace Lesson11
     {
         static void Main(string[] args)
         {
-            var thread1 = new Thread(ProcessCandidates)
-            {
-                IsBackground = true
-            };
+            var thread = new Thread(ProcessEquations);
+            thread.Start();
 
-            thread1.Start();
+            ProcessCandidates();
 
-            ProcessEquations();
-
-            thread1.Join();
+            Console.WriteLine("All letters have been sent");
         }
 
         static void ProcessCandidates()
@@ -37,15 +33,14 @@ namespace Lesson11
 
             foreach (var candidate in result)
             {
-                if (candidate.Value)
-                    MailSender.SendMessageConfirmation(candidate.Key, 200000);
-                else
-                    MailSender.SendMessageDecline(candidate.Key);
+                Thread thread = candidate.Value ? new Thread(() => MailSender.SendMessageConfirmation(candidate.Key, 200000)) :
+                    new Thread(() => MailSender.SendMessageDecline(candidate.Key));
 
+                thread.IsBackground = true;
+                thread.Start();
+                thread.Join();
                 Thread.Sleep(500);
             }
-
-            Console.WriteLine("All letters have been sent");
         }
 
         static void ProcessEquations()

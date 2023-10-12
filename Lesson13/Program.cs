@@ -1,4 +1,5 @@
 ﻿using Lesson13.Equations;
+using Lesson13.Exceptions;
 
 namespace Lesson13
 {
@@ -10,25 +11,33 @@ namespace Lesson13
 
             double a = 1;
 
+            Task<string>[] tasks = new Task<string>[2];
+
             for (int j = 0; j < 50; j++)
             {
                 double b = random.Next(-20, 20);
                 double c = random.Next(-20, 20);
 
-                Task<string> task1 = Task.Run(() => QuadraticEquation.CalculateQuadraticEquation(a, b, c));
-                Task<string> task2 = Task.Run(() => QuadraticEquationVieta.CalculateQuadraticEquationVieta(a, b, c));
-
-                var taskCompletedId = Task.WaitAny(task1, task2);
-
-                if (taskCompletedId == 0)
+                try
                 {
-                    Console.WriteLine("Standard method: ");
-                    Console.WriteLine(task1.Result);
+                    Task<string> task1 = Task.Run(() => QuadraticEquation.CalculateQuadraticEquation(a, b, c));
+                    Task<string> task2 = Task.Run(() => QuadraticEquation.CalculateQuadraticEquationVieta(a, b, c));
+
+                    tasks[0] = task1;
+                    tasks[1] = task2;
+
+                    var taskCompletedId = Task.WaitAny(tasks);
+                    Console.WriteLine(tasks[taskCompletedId].Result);
                 }
-                else
+
+                catch (RootException e)
                 {
-                    Console.WriteLine("Method according to Vieta's theorem:");
-                    Console.WriteLine(task2.Result);
+                    Console.WriteLine(tasks[0].Result);
+                }
+
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
                 }
 
                 Console.WriteLine();

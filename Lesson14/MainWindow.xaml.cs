@@ -11,7 +11,7 @@ namespace Lesson14
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly string _path = "..//..//..//..//..//Where_the_crawdads_sing.txt";
+        private const string Path = "..//..//..//..//..//Where_the_crawdads_sing.txt";
 
         private CancellationTokenSource _source;
 
@@ -29,15 +29,18 @@ namespace Lesson14
 
             try
             {
-                var content = await File.ReadAllTextAsync(_path, token);
+                var content = await File.ReadAllTextAsync(Path, token);
                 TextBox.Text = content[..100000];
             }
             catch (Exception ex)
             {
+                TextBox.Text = "";
+                var message = ex.Message;
+
                 if (ex is TaskCanceledException)
-                    TextBox.Text = "Load was canceled";
-                else
-                    TextBox.Text = ex.Message;
+                    message = "Load was canceled";
+
+                MessageBox.Show(message);
             }
         }
 

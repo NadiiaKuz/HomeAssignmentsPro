@@ -7,7 +7,9 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <TextBox x:Name="TextBox" HorizontalAlignment="Left" Margin="212,29,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="380" Height="358"/>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalAlignment="Left" VerticalAlignment="Top" Width="380" Height="358" Margin="212,29,0,0">
+            <TextBox x:Name="TextBox" TextWrapping="Wrap" AcceptsReturn="True"/>
+        </ScrollViewer>
         <Button x:Name="ButtonLoad" Content="Load" HorizontalAlignment="Left" Margin="91,102,0,0" VerticalAlignment="Top" Height="22" Width="61" Click="ButtonLoad_Click"/>
         <Button x:Name="ButtonCancel" Content="Cancel" HorizontalAlignment="Left" Margin="91,173,0,0" VerticalAlignment="Top" Height="22" Width="61" Click="ButtonCancel_Click"/>
 

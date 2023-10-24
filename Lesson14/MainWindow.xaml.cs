@@ -22,7 +22,7 @@ namespace Lesson14
 
         private async void ButtonLoad_Click(object sender, RoutedEventArgs e)
         {
-            TextBox.Text = "";
+            TextBox.Text = String.Empty;
 
             _source = new CancellationTokenSource();
             CancellationToken token = _source.Token;
@@ -37,8 +37,6 @@ namespace Lesson14
 
                     while ((read = await reader.ReadAsync(buffer, token)) > 0)
                     {
-                        token.ThrowIfCancellationRequested();
-
                         TextBox.AppendText(new string(buffer, 0, read));
 
                         await Task.Delay(100);

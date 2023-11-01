@@ -22,19 +22,29 @@ namespace Lesson14
 
         private async void ButtonLoad_Click(object sender, RoutedEventArgs e)
         {
-            TextBox.Text = "Text is loading...";
+            TextBox.Text = String.Empty;
 
             _source = new CancellationTokenSource();
             CancellationToken token = _source.Token;
 
             try
             {
-                var content = await File.ReadAllTextAsync(Path, token);
-                TextBox.Text = content[..100000];
+
+                using (StreamReader reader = new(Path))
+                {
+                    char[] buffer = new char[1024];
+                    int read;
+
+                    while ((read = await reader.ReadAsync(buffer, token)) > 0)
+                    {
+                        TextBox.AppendText(new string(buffer, 0, read));
+
+                        await Task.Delay(100);
+                    }
+                }
             }
             catch (Exception ex)
             {
-                TextBox.Text = "";
                 var message = ex.Message;
 
                 if (ex is TaskCanceledException)
